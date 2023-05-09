@@ -28,6 +28,7 @@ type RouterISISInterface struct {
 	HelloPasswordText     types.String `tfsdk:"hello_password_text"`
 	HelloPasswordHmacMd5  types.String `tfsdk:"hello_password_hmac_md5"`
 	HelloPasswordKeychain types.String `tfsdk:"hello_password_keychain"`
+	BfdFastDetectIpv6     types.Bool   `tfsdk:"bfd_fast_detect_ipv6"`
 }
 
 func (data RouterISISInterface) getPath() string {
@@ -83,6 +84,11 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	}
 	if !data.HelloPasswordKeychain.IsNull() && !data.HelloPasswordKeychain.IsUnknown() {
 		body, _ = sjson.Set(body, "hello-password.keychain.keychain-name", data.HelloPasswordKeychain.ValueString())
+	}
+	if !data.BfdFastDetectIpv6.IsNull() && !data.BfdFastDetectIpv6.IsUnknown() {
+		if data.BfdFastDetectIpv6.ValueBool() {
+			body, _ = sjson.Set(body, "bfd.fast-detect.ipv6", map[string]string{})
+		}
 	}
 	return body
 }
@@ -167,6 +173,15 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	} else {
 		data.HelloPasswordKeychain = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); !data.BfdFastDetectIpv6.IsNull() {
+		if value.Exists() {
+			data.BfdFastDetectIpv6 = types.BoolValue(true)
+		} else {
+			data.BfdFastDetectIpv6 = types.BoolValue(false)
+		}
+	} else {
+		data.BfdFastDetectIpv6 = types.BoolNull()
+	}
 }
 
 func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
@@ -214,6 +229,11 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "hello-password.keychain.keychain-name"); value.Exists() {
 		data.HelloPasswordKeychain = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); value.Exists() {
+		data.BfdFastDetectIpv6 = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectIpv6 = types.BoolValue(false)
 	}
 }
 

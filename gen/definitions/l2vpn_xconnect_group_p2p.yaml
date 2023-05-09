@@ -70,3 +70,4 @@ attributes:
         example: 1001
       - yang_name: pw-class
         example: PW_CLASS_1
+

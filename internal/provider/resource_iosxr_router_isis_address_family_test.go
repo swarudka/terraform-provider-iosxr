@@ -16,7 +16,7 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 			{
 				Config: testAccIosxrRouterISISAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv4"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv6"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "saf_name", "unicast"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_narrow", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_wide", "true"),
@@ -25,7 +25,6 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.narrow", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.wide", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.transition", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "router_id_ip_address", "1.2.3.4"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_delay_interval", "300"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_critical", "true"),
@@ -39,25 +38,24 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_passive_only", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_link_attributes", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_ldp_auto_config", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_router_id_ip_address", "1.2.3.4"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_1_2", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_1", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_2_only", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_maximum_wait", "5000"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_initial_wait", "50"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_secondary_wait", "200"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.priority", "critical"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.tag", "100"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_mpls_sr_prefer", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes", "100"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.level_id", "1"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.maximum_prefixes", "1000"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_id.0.instance_id", "CORE"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_id.0.route_policy", "ROUTE_POLICY_1"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_router_isis_address_family.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]",
+				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv6][saf-name=unicast]",
 			},
 		},
 	})
@@ -67,7 +65,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 	return `
 	resource "iosxr_router_isis_address_family" "test" {
 		process_id = "P1"
-		af_name = "ipv4"
+		af_name = "ipv6"
 		saf_name = "unicast"
 	}
 	`
@@ -77,7 +75,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 	return `
 	resource "iosxr_router_isis_address_family" "test" {
 		process_id = "P1"
-		af_name = "ipv4"
+		af_name = "ipv6"
 		saf_name = "unicast"
 		metric_style_narrow = false
 		metric_style_wide = true
@@ -88,7 +86,6 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 			wide = true
 			transition = false
 		}]
-		router_id_ip_address = "1.2.3.4"
 		default_information_originate = true
 		fast_reroute_delay_interval = 300
 		fast_reroute_per_link_priority_limit_critical = true
@@ -102,22 +99,21 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 		advertise_passive_only = true
 		advertise_link_attributes = true
 		mpls_ldp_auto_config = false
-		mpls_traffic_eng_router_id_ip_address = "1.2.3.4"
 		mpls_traffic_eng_level_1_2 = false
 		mpls_traffic_eng_level_1 = false
 		mpls_traffic_eng_level_2_only = true
 		spf_interval_maximum_wait = 5000
 		spf_interval_initial_wait = 50
 		spf_interval_secondary_wait = 200
-		spf_prefix_priorities = [{
-			priority = "critical"
-			tag = 100
-		}]
 		segment_routing_mpls_sr_prefer = true
 		maximum_redistributed_prefixes = 100
 		maximum_redistributed_prefixes_levels = [{
 			level_id = 1
 			maximum_prefixes = 1000
+		}]
+		redistribute_id = [{
+			instance_id = "CORE"
+			route_policy = "ROUTE_POLICY_1"
 		}]
 	}
 	`
