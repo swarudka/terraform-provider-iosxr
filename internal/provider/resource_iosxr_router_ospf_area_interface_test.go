@@ -37,6 +37,9 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "priority", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "passive_enable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "passive_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_ti_lfa_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_index", "33"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -50,7 +53,7 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_ospf_area_interface.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
+		ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF11]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -61,7 +64,7 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 
 func testAccIosxrRouterOSPFAreaInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
-	config += `	process_name = "OSPF1"` + "\n"
+	config += `	process_name = "OSPF11"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `}` + "\n"
@@ -70,7 +73,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_minimum() string {
 
 func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
-	config += `	process_name = "OSPF1"` + "\n"
+	config += `	process_name = "OSPF11"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	network_broadcast = false` + "\n"
@@ -81,6 +84,9 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config += `	priority = 100` + "\n"
 	config += `	passive_enable = false` + "\n"
 	config += `	passive_disable = true` + "\n"
+	config += `	fast_reroute_per_prefix_ti_lfa_enable = true` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 22` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_index = 33` + "\n"
 	config += `}` + "\n"
 	return config
 }

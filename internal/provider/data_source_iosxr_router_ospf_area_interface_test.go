@@ -35,6 +35,9 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "priority", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_enable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_ti_lfa_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_index", "33"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -50,7 +53,7 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	process_name = "OSPF1"` + "\n"
+	config += `	process_name = "OSPF11"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	network_broadcast = false` + "\n"
@@ -61,11 +64,14 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config += `	priority = 100` + "\n"
 	config += `	passive_enable = false` + "\n"
 	config += `	passive_disable = true` + "\n"
+	config += `	fast_reroute_per_prefix_ti_lfa_enable = true` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 22` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_index = 33` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_router_ospf_area_interface" "test" {
-			process_name = "OSPF1"
+			process_name = "OSPF11"
 			area_id = "0"
 			interface_name = "GigabitEthernet0/0/0/1"
 			depends_on = [iosxr_router_ospf_area_interface.test]
