@@ -16,6 +16,8 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       next_hop_self_inheritance_disable          = true
       route_reflector_client                     = true
       route_reflector_client_inheritance_disable = true
+      route_policy_in                            = "POLICYIN"
+      route_policy_out                           = "POLICYOUT"
     }
   ]
 }

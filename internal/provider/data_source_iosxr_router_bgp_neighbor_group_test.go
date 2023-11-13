@@ -40,6 +40,8 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_in", "POLICYIN"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_out", "POLICYOUT"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -81,6 +83,8 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `		next_hop_self_inheritance_disable = true` + "\n"
 	config += `		route_reflector_client = true` + "\n"
 	config += `		route_reflector_client_inheritance_disable = true` + "\n"
+	config += `		route_policy_in = "POLICYIN"` + "\n"
+	config += `		route_policy_out = "POLICYOUT"` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"

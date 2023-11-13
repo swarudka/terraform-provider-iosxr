@@ -54,6 +54,10 @@ attributes:
         example: true
       - yang_name: route-reflector-client/inheritance-disable
         example: true
+      - yang_name: route-policy/in
+        example: POLICYIN
+      - yang_name: route-policy/out
+        example: POLICYOUT
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
